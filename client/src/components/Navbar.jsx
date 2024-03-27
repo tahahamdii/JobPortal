@@ -6,7 +6,7 @@ import { HiMenuAlt3 } from "react-icons/hi";
 import { AiOutlineClose, AiOutlineLogout } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import CustomButton from "./CustomButton";
-import { users } from "../utils";
+import { users } from "../utils/data";
 import { useSelector } from "react-redux";
 
 function MenuList({ user, onClick }) {
@@ -97,7 +97,7 @@ function MenuList({ user, onClick }) {
   );
 }
 const Navbar = () => {
-  const user = useSelector((state) => state.user);
+  const user = users[1];
   const [isOpen, setIsOpen] = useState(false);
 
   const handleCloseNavbar = () => {
@@ -110,7 +110,7 @@ const Navbar = () => {
         <nav className='container mx-auto flex items-center justify-between p-5'>
           <div>
             <Link to='/' className='text-blue-600 font-bold text-xl'>
-              Job<span className='text-[#1677cccb]'>Finder</span>
+              Jobs<span className='text-[#1677cccb]'>Portal</span>
             </Link>
           </div>
 
