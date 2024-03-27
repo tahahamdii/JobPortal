@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Outlet,Navigate,Route,Routes, useLocation } from 'react-router-dom'
 
-import './App.css'
 import { Footer, Navbar } from './components';
+import { About, AuthPage, Companies, CompanyProfile, FindJobs, JobDetail, UploadJob, UserProfile } from './pages';
 
 function Layout() {
   const user = true;
@@ -15,8 +15,7 @@ function Layout() {
 }
 
 function App() {
-  const [count, setCount] = useState(0)
-
+const user={};
   return (
    <main>
     <Navbar/>
