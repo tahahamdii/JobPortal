@@ -7,6 +7,7 @@ import router from "./routes/index.js";
 import xss from "xss-clean";
 import mongoSanitize from "express-mongo-sanitize";
 import dbConnection from "./dbConfig/dbConnection.js";
+import errorMiddleware from "./middlewares/errorMiddleware.js";
 
 
 dotenv.config();
@@ -33,6 +34,9 @@ app.use(morgan("dev"));
 
 app.use(router);
 
+//Error Handler
+
+app.use(errorMiddleware);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
