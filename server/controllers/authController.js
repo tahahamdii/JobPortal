@@ -1,4 +1,4 @@
-import Users from "../models/UserModel.js";
+import Users from "../models/userModel.js";
 
 export const register = async (req, res, next) => {
   const { firstName, lastName, email, password } = req.body;
@@ -6,17 +6,18 @@ export const register = async (req, res, next) => {
   //validate fileds
 
   if (!firstName) {
-    next("First Name is required");
+    return res.status(400).send("First Name is required");
   }
   if (!email) {
-    next("Email is required");
+    return res.status(400).send("Email is required");
   }
   if (!lastName) {
-    next("Last Name is required");
+    return res.status(400).send("Last Name is required");
   }
   if (!password) {
-    next("Password is required");
+    return res.status(400).send("Password is required");
   }
+  
 
   try {
     const userExist = await Users.findOne({ email });

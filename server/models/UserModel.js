@@ -52,7 +52,7 @@ userSchema.methods.comparePassword = async function (userPassword) {
 
 //JSON WEBTOKEN
 userSchema.methods.createJWT = function () {
-  return JWT.sign({ userId: this._id }, process.env.JWT_SECRET_KEY, {
+  return JWT.sign({ userId: this._id }, process.env.JWT_SECRET, {
     expiresIn: "1d",
   });
 };

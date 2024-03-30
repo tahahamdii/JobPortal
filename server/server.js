@@ -3,11 +3,10 @@ import dotenv from "dotenv";
 import cors from "cors";
 import morgan from "morgan";
 import bodyParser from "body-parser";
-
+import router from "./routes/index.js";
 import xss from "xss-clean";
 import mongoSanitize from "express-mongo-sanitize";
 import dbConnection from "./dbConfig/dbConnection.js";
-import { mongo } from "mongoose";
 
 
 dotenv.config();
@@ -31,6 +30,9 @@ app.use(express.urlencoded({extended: true}));
 
 
 app.use(morgan("dev"));
+
+app.use(router);
+
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
