@@ -2,8 +2,10 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { CustomButton, JobCard, JobTypes, TextInput } from "../components";
 import { jobs } from "../utils/data";
+import { apiRequest } from "../utils";
 
 const UploadJob = () => {
+  const { user } = useSelector((state) => state.user);
   const {
     register,
     handleSubmit,
@@ -17,8 +19,38 @@ const UploadJob = () => {
 
   const [errMsg, setErrMsg] = useState("");
   const [jobTitle, setJobTitle] = useState("Full-Time");
+  const [jobType, setJobType] = useState("Full-Time");
+  const [isLoading, setIsLoading] = useState(false);
+  const [recentPost, setRecentPost] = useState([]);
 
-  const onSubmit = async (data) => {};
+
+  const onSubmit = async (data) => {
+    setIsLoading(true);
+    setErrMsg(null);
+    try {
+      const res = await apiRequest({
+        url: "/jobs/upload-job",
+        token: user?.token,
+        data: newData,
+        method: "POST",
+      });
+
+      if (res.status === "failed"){
+        setErrMsg({ ...res});
+      } else {
+        setErrMsg({ status : "success", message: res.message});
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
+
+    const newData = { ...data, jobType: jobType};
+  };
 
   return (
     <div className='container mx-auto flex flex-col md:flex-row gap-8 2xl:gap-14 bg-[#f7fdfd] px-5'>
@@ -45,7 +77,7 @@ const UploadJob = () => {
             <div className='w-full flex gap-4'>
               <div className={`w-1/2 mt-2`}>
                 <label className='text-gray-600 text-sm mb-1'>Job Type</label>
-                <JobTypes jobTitle={jobTitle} setJobTitle={setJobTitle} />
+                <JobTypes jobTitle={jobType} setJobTitle={setJobType} />
               </div>
 
               <div className='w-1/2'>
