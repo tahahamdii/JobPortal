@@ -8,6 +8,7 @@ import { FiPhoneCall, FiEdit3, FiUpload } from "react-icons/fi";
 import { Link, useParams } from "react-router-dom";
 import { companies, jobs } from "../utils/data";
 import { CustomButton, JobCard, Loading, TextInput } from "../components";
+import { handleFileUpload } from "../utils";
 
 const CompnayForm = ({ open, setOpen }) => {
   const { user } = useSelector((state) => state.user);
@@ -25,8 +26,15 @@ const CompnayForm = ({ open, setOpen }) => {
   const dispatch = useDispatch();
   const [profileImage, setProfileImage] = useState("");
   const [uploadCv, setUploadCv] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [errMsg, setErrMsg] = useState({ status: false, message: "" });
 
-  const onSubmit = () => {};
+  const onSubmit = async (data) => {
+    setIsLoading(true);
+    setErrMsg(null);
+      const uri = profileImage && (await handleFileUpload(profileImage));
+      const newData = uri ? { ...data, profileUrl: uri } : data;
+  };
 
   const closeModal = () => setOpen(false);
 
