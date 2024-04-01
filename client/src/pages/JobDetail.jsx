@@ -7,8 +7,8 @@ import { jobs } from "../utils/data";
 import { CustomButton, JobCard } from "../components";
 
 const JobDetail = () => {
-  const params = useParams();
-  const id = parseInt(params.id) - 1;
+  const {id} = useParams();
+  const {user} = userSelector((state) => state.user);
   const [job, setJob] = useState(jobs[0]);
   const [selected, setSelected] = useState("0");
 
