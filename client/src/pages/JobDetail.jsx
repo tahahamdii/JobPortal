@@ -146,11 +146,11 @@ const JobDetail = () => {
 
                 <span className='text-base'>{job?.detail[0]?.desc}</span>
 
-                {job?.detail[0]?.requirement && (
+                {job?.detail[0]?.requirements && (
                   <>
                     <p className='text-xl font-semibold mt-8'>Requirement</p>
                     <span className='text-base'>
-                      {job?.detail[0]?.requirement}
+                      {job?.detail[0]?.requirements}
                     </span>
                   </>
                 )}
@@ -166,7 +166,7 @@ const JobDetail = () => {
                 </div>
 
                 <p className='text-xl font-semibold'>About Company</p>
-                <span>{job?.company?.about}</span>
+                <span>{job?.company.about}</span>
               </>
             )}
           </div>
@@ -185,9 +185,15 @@ const JobDetail = () => {
           <p className='text-gray-500 font-semibold'>Similar Job Post</p>
 
           <div className='w-full flex flex-wrap gap-4'>
-            {jobs?.slice(0, 6).map((job, index) => (
-              <JobCard job={job} key={index} />
-            ))}
+            {similarJobs?.slice(0, 6).map((job, index) => {
+              const data = {
+                name: job?.company.name,
+                logo: job?.company.profileUrl,
+                ...job,
+              };
+              return 
+              <JobCard job={data} key={index} />
+            })}
           </div>
         </div>
       </div>
