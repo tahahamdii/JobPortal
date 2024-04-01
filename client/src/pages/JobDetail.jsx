@@ -4,24 +4,59 @@ import moment from "moment";
 import { AiOutlineSafetyCertificate } from "react-icons/ai";
 import { useParams } from "react-router-dom";
 import { jobs } from "../utils/data";
-import { CustomButton, JobCard } from "../components";
+import { CustomButton, JobCard, Loading } from "../components";
+import { apiRequest } from "../utils";
+import { useSelector } from "react-redux";
 
 const JobDetail = () => {
-  const {id} = useParams();
-  const {user} = userSelector((state) => state.user);
-  const [job, setJob] = useState(jobs[0]);
+  const { id } = useParams();
+  const { user } = useSelector((state) => state.user);
+  const [job, setJob] = useState(null);
+  const [similarJobs, setSimilarJobs] = useState([]);
   const [selected, setSelected] = useState("0");
+  const [isFetching, setIsFetching] = useState(false);
+
+  const getJobDetails = async () => {
+    if (!id) {
+      console.error('ID is undefined');
+      return;
+    }
+    
+    setIsFetching(true);
+
+      try {
+        const res = await apiRequest({
+          url: "/jobs/get-job-detail/" + id,
+          method: "GET",
+        });
+        
+
+        setJob(res?.data);
+        setSimilarJobs(res?.similarJobs);
+        setIsFetching(false);
+
+      } catch (error) {
+        setIsFetching(false);
+        console.log(error);
+      }
+  };
 
   useEffect(() => {
-    setJob(jobs[id ?? 0]);
+    if (id) {
+      getJobDetails();
+
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    }
   }, [id]);
 
   return (
     <div className='container mx-auto'>
       <div className='w-full flex flex-col md:flex-row gap-10'>
         {/* LEFT SIDE */}
-        <div className='w-full h-fit md:w-2/3 2xl:2/4 bg-white px-5 py-10 md:px-10 shadow-md'>
+        {isFetching ? (
+          <Loading/>
+        ) : (
+          <div className='w-full h-fit md:w-2/3 2xl:2/4 bg-white px-5 py-10 md:px-10 shadow-md'>
           <div className='w-full flex items-center justify-between'>
             <div className='w-3/4 flex gap-2'>
               <img
@@ -142,7 +177,8 @@ const JobDetail = () => {
               containerStyles={`w-full flex items-center justify-center text-white bg-black py-3 px-5 outline-none rounded-full text-base`}
             />
           </div>
-        </div>
+        </div>)
+        }
 
         {/* RIGHT SIDE */}
         <div className='w-full md:w-1/3 2xl:w-2/4 p-5 mt-20 md:mt-0'>
