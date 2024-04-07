@@ -7,7 +7,7 @@ import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import Header from "../components/Header";
 import { experience, jobTypes, jobs } from "../utils/data";
 import { CustomButton, JobCard, ListBox } from "../components";
-import { apiRequest } from "../utils";
+import { apiRequest, updateURL } from "../utils";
 
 const FindJobs = () => {
   const [sort, setSort] = useState("Newest");
@@ -47,11 +47,12 @@ const FindJobs = () => {
       });
 
       setNumPage(res?.numOfPage);
-      setRecordsCount(res?.totalJobs);
-      setData(res?.data);
+      setRecordCount(res?.totalJobs);
+      setData(res.data);
       setIsFetching(false);
 
     } catch (error) {
+      setIsFetching(false);
       console.log(error);
     }
   };
@@ -65,7 +66,11 @@ const FindJobs = () => {
   };
 
   const filterExperience = async (e) => {
-    setFilterExp(e);
+    if (expVal?.includes(e)) {
+      setExpVal(expVal.filter((el) => el != e));
+    } else {
+      setExpVal([...expVal, e]);
+    }
   };
 
   useEffect(() => {
@@ -73,16 +78,18 @@ const FindJobs = () => {
       let newExpVal = [];
 
       expVal?.map((e1) => {
-        const newE1 = e1.split("-");
+        const newE1 = e1?.split("-");
         newExpVal.push(Number(newE1[0]),Number(newE1[1]));
       });
       newExpVal?.sort((a,b) => a - b);
       setFilterExp(`${newExpVal[0]}-${newExpVal[newExpVal.length - 1]}`);
     }
   }, [expVal]);
+
+
   useEffect(() => {
     fetchJobs();
-  },[sort,filterJobTypes,filterExp,page]);
+  },[sort, filterJobTypes, filterExp, page]);
 
   return (
     <div>
@@ -158,7 +165,7 @@ const FindJobs = () => {
         <div className='w-full md:w-5/6 px-5 md:px-0'>
           <div className='flex items-center justify-between mb-4'>
             <p className='text-sm md:text-base'>
-              Shwoing: <span className='font-semibold'>1,902</span> Jobs
+              Shwoing: <span className='font-semibold'>{recordCount}</span> Jobs
               Available
             </p>
 
@@ -170,9 +177,17 @@ const FindJobs = () => {
           </div>
 
           <div className='w-full flex flex-wrap gap-4'>
-            {jobs.map((job, index) => (
-              <JobCard job={job} key={index} />
-            ))}
+            {data?.map((job, index) => {
+              const newJob = {
+                name: job?.company?.name,
+                logo: job?.company?.profileUrl,
+                ...job,
+
+              };
+              return (
+                <JobCard job={newJob} key={index} />
+              );
+            })}
           </div>
 
           {numPage > page && !isFetching && (
