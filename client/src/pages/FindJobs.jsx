@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BiBriefcaseAlt2 } from "react-icons/bi";
 import { BsStars } from "react-icons/bs";
@@ -7,6 +7,7 @@ import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import Header from "../components/Header";
 import { experience, jobTypes, jobs } from "../utils/data";
 import { CustomButton, JobCard, ListBox } from "../components";
+import { apiRequest } from "../utils";
 
 const FindJobs = () => {
   const [sort, setSort] = useState("Newest");
@@ -19,11 +20,41 @@ const FindJobs = () => {
   const [jobLocation, setJobLocation] = useState("");
   const [filterJobTypes, setFilterJobTypes] = useState([]);
   const [filterExp, setFilterExp] = useState([]);
+  const [expVal, setExpVal] = useState([]);
 
   const [isFetching, setIsFetching] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
+
+  const fetchJobs = async () => {
+    setIsFetching(true);
+
+    const newURL = updateURL({
+      pageNum: page,
+      query: searchQuery,
+      cmpLoc: jobLocation,
+      sort: sort,
+      navigate: navigate,
+      location: location,
+      jtype: filterJobTypes,
+      exp: filterExp,
+    });
+    try{
+      const res = await apiRequest({
+        url: "/jobs" + newURL,
+        method: "GET",
+      });
+
+      setNumPage(res?.numOfPage);
+      setRecordsCount(res?.totalJobs);
+      setData(res?.data);
+      setIsFetching(false);
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const filterJobs = (val) => {
     if (filterJobTypes?.includes(val)) {
@@ -36,6 +67,19 @@ const FindJobs = () => {
   const filterExperience = async (e) => {
     setFilterExp(e);
   };
+
+  useEffect(() => {
+    if(expVal.length > 0) {
+      let newExpVal = [];
+
+      expVal?.map((e1) => {
+        const newE1 = e1.split("-");
+        newExpVal.push(Number(newE1[0]),Number(newE1[1]));
+      });
+      newExpVal?.sort((a,b) => a - b);
+      setFilterExp(`${newExpVal[0]}-${newExpVal[newExpVal.length - 1]}`);
+    }
+  }, [expVal]);
 
   return (
     <div>
