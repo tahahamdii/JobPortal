@@ -80,6 +80,9 @@ const FindJobs = () => {
       setFilterExp(`${newExpVal[0]}-${newExpVal[newExpVal.length - 1]}`);
     }
   }, [expVal]);
+  useEffect(() => {
+    fetchJobs();
+  },[sort,filterJobTypes,filterExp,page]);
 
   return (
     <div>
