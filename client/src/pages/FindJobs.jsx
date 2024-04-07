@@ -6,7 +6,7 @@ import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 
 import Header from "../components/Header";
 import { experience, jobTypes, jobs } from "../utils/data";
-import { CustomButton, JobCard, ListBox } from "../components";
+import { CustomButton, JobCard, ListBox, Loading } from "../components";
 import { apiRequest, updateURL } from "../utils";
 
 const FindJobs = () => {
@@ -37,7 +37,7 @@ const FindJobs = () => {
       sort: sort,
       navigate: navigate,
       location: location,
-      jtype: filterJobTypes,
+      jType: filterJobTypes,
       exp: filterExp,
     });
     try{
@@ -58,8 +58,8 @@ const FindJobs = () => {
   };
 
   const filterJobs = (val) => {
-    if (filterJobTypes?.includes(val)) {
-      setFilterJobTypes(filterJobTypes.filter((el) => el != val));
+    if (filterJobTypes.includes(val)) {
+      setFilterJobTypes(filterJobTypes?.filter((el) => el != val));
     } else {
       setFilterJobTypes([...filterJobTypes, val]);
     }
@@ -67,7 +67,7 @@ const FindJobs = () => {
 
   const filterExperience = async (e) => {
     if (expVal?.includes(e)) {
-      setExpVal(expVal.filter((el) => el != e));
+      setExpVal(expVal?.filter((el) => el != e));
     } else {
       setExpVal([...expVal, e]);
     }
@@ -81,10 +81,14 @@ const FindJobs = () => {
         const newE1 = e1?.split("-");
         newExpVal.push(Number(newE1[0]),Number(newE1[1]));
       });
+
       newExpVal?.sort((a,b) => a - b);
-      setFilterExp(`${newExpVal[0]}-${newExpVal[newExpVal.length - 1]}`);
+
+      setFilterExp(`${newExpVal[0]}-${newExpVal[newExpVal?.
+        length - 1]}`);
     }
   }, [expVal]);
+
 
 
   useEffect(() => {
@@ -189,6 +193,11 @@ const FindJobs = () => {
               );
             })}
           </div>
+          {isFetching && (
+            <div className="py-10">
+              <Loading/>
+            </div>
+          )}
 
           {numPage > page && !isFetching && (
             <div className='w-full flex items-center justify-center pt-16'>
