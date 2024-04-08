@@ -179,7 +179,7 @@ const Navbar = () => {
           <Link
             onClick={handleCloseNavbar}
             to={
-              user?.accountType === "seeker" ? "applly-gistory" : "upload-job"
+              user?.accountType === "seeker" ? "applly-history" : "upload-job"
             }
           >
             {user?.accountType === "seeker" ? "Applications" : "Upload Job"}
