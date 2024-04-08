@@ -16,7 +16,7 @@ function Layout() {
 }
 
 function App() {
-const user={};
+const {user} = useSelector((state) => state.user);
   return (
    <main>
     <Navbar/>
@@ -39,7 +39,7 @@ const user={};
         />
         <Route 
         path={
-          user?.user?.accountType === "seeker"
+          user?.accountType === "seeker"
           ? "/user-profile"
           : "/user-profile/:id"
         }

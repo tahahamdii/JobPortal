@@ -78,6 +78,11 @@ const FindJobs = () => {
     await fetchJobs();
   };
 
+  const handleShowMore = async (e) => {
+    e.preventDefault();
+    setPage((prev) => prev + 1);
+  };
+
   useEffect(() => {
     if(expVal.length > 0) {
       let newExpVal = [];
@@ -207,6 +212,7 @@ const FindJobs = () => {
           {numPage > page && !isFetching && (
             <div className='w-full flex items-center justify-center pt-16'>
               <CustomButton
+                onClick={handleShowMore}
                 title='Load More'
                 containerStyles={`text-blue-600 py-1.5 px-5 focus:outline-none hover:bg-blue-700 hover:text-white rounded-full text-base border border-blue-600`}
               />
