@@ -73,6 +73,11 @@ const FindJobs = () => {
     }
   };
 
+    const handleSearchSubmit = async (e) => {
+    e.preventDefault();
+    await fetchJobs();
+  };
+
   useEffect(() => {
     if(expVal.length > 0) {
       let newExpVal = [];
@@ -100,7 +105,7 @@ const FindJobs = () => {
       <Header
         title='Find Your Dream Job with Ease'
         type='home'
-        handleClick={() => {}}
+        handleClick={handleSearchSubmit}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         location={jobLocation}
