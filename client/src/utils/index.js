@@ -72,7 +72,7 @@ export const updateURL = ({
     }
 
     if(jType) {
-        params.set('jtyoe', jType);
+        params.set('jtype', jType);
     }
 
     if(exp) {
