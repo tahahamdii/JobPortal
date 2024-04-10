@@ -35,6 +35,7 @@ export const register = async (req, res, next) => {
       lastName,
       email,
       password,
+      email,
     });
 
     // user token
@@ -42,11 +43,13 @@ export const register = async (req, res, next) => {
     const tokenn = await new token({
       userId: user._id,
       token: crypto.randomBytes(32).toString("hex"),
-    });
+    }).save();
+    const url = `${process.env.BASE}/users/${user._id}/verify/${tokenn.token}`;
+    await sendEmail({user.email,url,subject:"Verify Email Address"});
 
     res.status(201).send({
       success: true,
-      message: "Account created successfully",
+      message: "An Email has been sent to your email address, please verify your email address",
       user: {
         _id: user._id,
         firstName: user.firstName,
