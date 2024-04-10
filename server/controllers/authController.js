@@ -1,4 +1,7 @@
 import Users from "../models/userModel.js";
+const token = require("../models/token");
+const sendEmail = require("../utils/sendEmail");
+const crypto = require("crypto");
 
 export const register = async (req, res, next) => {
   const { firstName, lastName, email, password } = req.body;
@@ -36,6 +39,10 @@ export const register = async (req, res, next) => {
 
     // user token
     const token = await user.createJWT();
+    const tokenn = await new token({
+      userId: user._id,
+      token: crypto.randomBytes(32).toString("hex"),
+    });
 
     res.status(201).send({
       success: true,
