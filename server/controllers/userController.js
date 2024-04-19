@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Users from "../models/userModel.js";
+import UserModel from "../models/UserModel.js";
 
 export const updateUser = async (req, res, next) => {
   const {
@@ -36,7 +36,7 @@ export const updateUser = async (req, res, next) => {
       _id: id,
     };
 
-    const user = await Users.findByIdAndUpdate(id, updateUser, { new: true });
+    const user = await UserModel.findByIdAndUpdate(id, updateUser, { new: true });
 
     const token = user.createJWT();
 
@@ -58,7 +58,7 @@ export const getUser = async (req, res, next) => {
   try {
     const id = req.body.user.userId;
 
-    const user = await Users.findById({ _id: id });
+    const user = await UserModel.findById({ _id: id });
 
     if (!user) {
       return res.status(200).send({
@@ -91,7 +91,7 @@ export const deleteUser = async (req, res, next) => {
       return res.status(404).send(`No User with id: ${id}`);
     }
 
-    await Users.findByIdAndRemove(id);
+    await UserModel.findByIdAndRemove(id);
 
     res.status(200).json({
       success: true,

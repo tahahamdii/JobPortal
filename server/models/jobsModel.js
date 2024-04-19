@@ -10,7 +10,7 @@ const jobSchema = new mongoose.Schema(
     vacancies: { type: Number },  
     experience: { type: Number, default: 0 },
     detail: [{ desc: { type: String }, requirements: { type: String } }],
-    application: [{ type: Schema.Types.ObjectId, ref: "Users" }],
+    application: [{ type: Schema.Types.ObjectId, ref: "UserModel" }],
   },
   { timestamps: true }
 );

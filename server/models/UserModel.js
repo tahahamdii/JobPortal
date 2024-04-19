@@ -57,6 +57,6 @@ userSchema.methods.createJWT = function () {
   });
 };
 
-const Users = mongoose.model("Users", userSchema);
+const UserModel = mongoose.model("UserModel", userSchema);
 
-export default Users;
+export default UserModel;

@@ -1,4 +1,4 @@
-import Users from "../models/userModel.js";
+import UserModel from "../models/UserModel.js";
 
 export const register = async (req, res, next) => {
   const { firstName, lastName, email, password } = req.body;
@@ -20,14 +20,14 @@ export const register = async (req, res, next) => {
   
 
   try {
-    const userExist = await Users.findOne({ email });
+    const userExist = await UserModel.findOne({ email });
 
     if (userExist) {
       next("Email Address already exists");
       return;
     }
 
-    const user = await Users.create({
+    const user = await UserModel.create({
       firstName,
       lastName,
       email,
@@ -66,7 +66,7 @@ export const signIn = async (req, res, next) => {
     }
 
     // find user by email
-    const user = await Users.findOne({ email }).select("+password");
+    const user = await UserModel.findOne({ email }).select("+password");
 
     if (!user) {
       next("Invalid -email or password");
