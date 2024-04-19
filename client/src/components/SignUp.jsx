@@ -194,7 +194,7 @@ const SignUp = ({ open, setOpen }) => {
                             <TextInput
                               name='lastName'
                               label='Last Name'
-                              placeholder='Wagonner'
+                              placeholder='eg. Doe'
                               type='text'
                               register={register("lastName", {
                                 required: "Last Name is required",
