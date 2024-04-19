@@ -13,8 +13,17 @@ module.exports = async (email , subject , text) => {
                 user: process.env.USER,
                 pass: process.env.PAS
             }
-        })
+        });
+        
+        await transporter.sendMail({
+            from:process.env.USER,
+            to:email,
+            subject: subject,
+            text:text
+        });
+        console.log("Email sent Successfully")
     } catch (error) {
-
+        console.log("Email not sent");
+        console.log(error)
     }
 }
